@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta Content-Type:text/html; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<style type=text/css>
+input {
+	margin: 0 5px 0 0;
+	width: 42px;
+	height: 42px;
+	text-align: center;
+}
+button {
+	margin: 0 5px 0 0;
+	width: 42px;
+	height: 42px;
+}
+input.cbutton {
+	margin: 5px 5px 0 0 ;
+	width: 50px;
+	height: 50px;
+	background: #fff;
+	border:1px solid #aaa;
+	font-size:12pt;
+	text-align:center;
+}
+#message{
+    font-style: italic;
+}
+</style>
+<script type=text/javascript>
+	function init() {
+		for (let i=0; i<1000; i++) move((Math.floor(Math.random()*size*size)));
+	}
+	function move(n) {      //공백 주변 4칸을 판단
+        if(n>(size-1)) tryMove(n,(n-size));
+        if(n%size!=0) tryMove(n,n-1);
+        if(n%size!=(size-1)) tryMove(n,n+1);
+        if(n<size*(size-1)) tryMove(n,(n+size));
+	}
+	function tryMove(from, to) {        //cell의 id를 찾아서 공백 바꾸는 함수
+        var s=document.getElementById("cell"+from); 
+        var d=document.getElementById("cell"+to);
+        if(d.value==" "){
+            d.value=s.value;
+            s.value=" ";
+        }
+	}
+	function GameOver(size) {
+
+	}
+	function drawBoard(size) {      //보드를 그려주는 함수
+		let str = "";
+		for(let i=0; i<size; i++) {
+			for (let j=0; j<size; j++) {
+				const id = i*size+j;
+				const val = id+1
+				str += "<input type=button id='cell" + id + "' ";
+				str += " class='cbutton' ";
+				str += " value='" + (val<size*size ? val : " ") + "' ";
+				str += " onclick='move(" + id + ");'>";
+			}
+			str += "<br/>";
+		}
+		document.getElementById("board").innerHTML = str;
+	}
+	function setSize(_size) {
+        size=parseInt(_size);
+        drawBoard(size);
+        init();
+	}
+	function solve() {
+
+	}
+</script>
+</head>
+<body onload="init();">
+	<input type="text" value="4" id="boardSize">
+	<button onclick="setSize(document.querySelector('#boardSize').value)">size</button> <!--size입력만큼 크기 변경-->
+	<button onclick="init();">init</button> <!--Move Count값 초기화-->
+	<button onclick="solve();">solve</button> <!--스스로 해결할 수 있는 기능 구현-->
+	<hr/>
+	<div id="board"></div>
+	<div>Move Count: <span id="message">0</span></div>  <!--document.getByelement로 증가시키기-->
+	<script>
+		let isGameOn = false;
+		let size=4;
+		drawBoard(size);
+	</script>
+	<p>20193119 한여준</p>
+</body>
+</html>
